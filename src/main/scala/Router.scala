@@ -1,19 +1,38 @@
 package com.zengularity.appmusic
 
+import scala.concurrent.ExecutionContext
+
+import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
-import de.heikoseeberger.akkahttpplayjson.PlayJsonSupport._
 
 import play.api.libs.json.Json
 
-object Router {
+import de.heikoseeberger.akkahttpplayjson.PlayJsonSupport._
 
-  val router: Route =
-    path("hello") {
-      get {
+import com.zengularity.appmusic.ws.DeezerClient
+
+class Router(deezerClient: DeezerClient)(implicit ec: ExecutionContext) {
+
+  val instance: Route = {
+    pathPrefix("deezer") {
+      (get & path("user" / Segment)) { id =>
         complete {
-          Json.obj("text" -> "Hello World")
+          deezerClient.userData(id).map {
+            case Left(err) => (StatusCodes.BadRequest, Json.obj("error" -> err))
+            case Right(user) => (StatusCodes.OK, Json.obj("data" -> user))
+          }
+        }
+      } ~ {
+        (get & path("user" / Segment / "albums")) { id =>
+          complete {
+            deezerClient.userAlbums(id).map {
+              case Left(err) => (StatusCodes.BadRequest, Json.obj("error" -> err))
+              case Right(albums) => (StatusCodes.OK, Json.obj("data" -> albums))
+            }
+          }
         }
       }
     }
+  }
 }

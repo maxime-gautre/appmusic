@@ -1,6 +1,7 @@
 package com.zengularity.appmusic
 
-import scala.concurrent.ExecutionContextExecutor
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContextExecutor}
 import scala.io.StdIn
 
 import akka.actor.ActorSystem
@@ -8,7 +9,11 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
 
+import play.api.libs.ws.ahc.StandaloneAhcWSClient
+
 import com.typesafe.scalalogging.Logger
+
+import com.zengularity.appmusic.ws.DeezerAhcClient
 
 
 object App {
@@ -20,7 +25,10 @@ object App {
     implicit val mat = ActorMaterializer()
     implicit val ec: ExecutionContextExecutor = actorSystem.dispatcher
 
-    val bindingFuture = Http(actorSystem).bindAndHandle(Route.handlerFlow(Router.router), "localhost", 9000)
+    val wsClient = StandaloneAhcWSClient()
+    val router = new Router(new DeezerAhcClient(wsClient, "https://api.deezer.com"))
+
+    val bindingFuture = Http(actorSystem).bindAndHandle(Route.handlerFlow(router.instance), "localhost", 9000)
     logger.info("Server on localhost:9000")
     logger.info("Press enter to stop")
 
@@ -28,8 +36,9 @@ object App {
 
     bindingFuture
       .flatMap(_.unbind())
-      .andThen { case _ =>
+      .onComplete { _ =>
         logger.info("Closing resources...")
+        wsClient.close()
         mat.shutdown()
         actorSystem.terminate()
         logger.info("Closing resources... OK")
