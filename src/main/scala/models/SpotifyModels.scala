@@ -4,7 +4,7 @@ import play.api.libs.json.Json
 
 object SpotifyModels {
 
-  case class Artist(id: String, name: String, uri: String)
+  case class Artist(id: String, name: String, uri: String) 
 
   object Artist {
     implicit val jsonReads = Json.reads[Artist]
