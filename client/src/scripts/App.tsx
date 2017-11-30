@@ -1,16 +1,20 @@
-import * as React from 'react';
 import './App.css';
 
-interface Props {
-  test?: boolean
-}
+import * as React from 'react';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 
-export default class App extends React.Component<Props, {}> {
-  render() {
-    return (
-      <div className="app">
-        Hello World
-      </div>
-    );
-  }
-}
+import { GetPlaylists } from './views/GetPlaylists'
+
+export const App = () => (
+  <Router>
+    <div>
+      <ul>
+        <Link to="/">Home</Link>
+        <Link to="/get">Get playlists</Link>
+        <Link to="/about">About</Link>
+      </ul>
+
+      <Route exact path="/get" component={ GetPlaylists }/>
+    </div>
+  </Router>
+)
