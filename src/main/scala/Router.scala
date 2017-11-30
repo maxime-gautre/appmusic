@@ -1,18 +1,15 @@
 package com.zengularity.appmusic
 
-import scala.concurrent.ExecutionContext
-
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
-
+import com.zengularity.appmusic.ws.StreamingClient
+import de.heikoseeberger.akkahttpplayjson.PlayJsonSupport._
 import play.api.libs.json.Json
 
-import de.heikoseeberger.akkahttpplayjson.PlayJsonSupport._
+import scala.concurrent.ExecutionContext
 
-import com.zengularity.appmusic.ws.DeezerClient
-
-class Router(deezerClient: DeezerClient)(implicit ec: ExecutionContext) {
+class Router(deezerClient: StreamingClient)(implicit ec: ExecutionContext) {
 
   val instance: Route = {
     pathPrefix("deezer") {

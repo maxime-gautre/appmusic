@@ -6,13 +6,7 @@ import scala.util.{Failure, Success, Try}
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.ahc.StandaloneAhcWSClient
 
-trait DeezerClient {
-  def userData(userId: String)(implicit ec: ExecutionContext): Future[Either[String, JsValue]]
-
-  def userAlbums(userId: String)(implicit ec: ExecutionContext): Future[Either[String, JsValue]]
-}
-
-class DeezerAhcClient(wsClient: StandaloneAhcWSClient, deezerEndPoint: String) extends DeezerClient {
+class DeezerAhcClient(wsClient: StandaloneAhcWSClient, deezerEndPoint: String) extends StreamingClient {
 
   private def parseResponse(body: String): Either[String, JsValue] = {
     Try(Json.parse(body)) match {
