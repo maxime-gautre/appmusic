@@ -32,16 +32,6 @@
         "no-any": true,
         "no-arg": true,
         "no-bitwise": false,
-        "no-console": [
-            false,
-            "log",
-            "error",
-            "debug",
-            "info",
-            "time",
-            "timeEnd",
-            "trace"
-        ],
         "no-consecutive-blank-lines": true,
         "no-construct": true,
         "no-debugger": true,
@@ -52,8 +42,12 @@
         "no-string-literal": false,
         "no-switch-case-fall-through": true,
         "no-trailing-whitespace": false,
-        "no-unused-expression": true,
+        "no-unused-expression": false,
         "no-use-before-declare": true,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "no-unused-variable": false,
+        "jsx-boolean-value": false,
         "one-line": [
             true,
             "check-catch",
@@ -70,6 +64,7 @@
 
         "triple-equals": [ true, "allow-null-check" ],
         "object-curly-spacing": ["always"],
+        "jsx-curly-spacing": ["always"],
         "typedef": [
             true,
             "parameter",
