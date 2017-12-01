@@ -1,8 +1,17 @@
 package com.zengularity.appmusic.models
 
+import java.util.UUID
+
 import play.api.libs.json.Json
 
 object AppMusicModels {
+
+  case class Origin(id: String, service: String)
+
+  object Origin {
+    implicit val jsonWrites = Json.writes[Origin]
+  }
+
   case class Artist(id: String, name: String)
 
   object Artist {
@@ -15,13 +24,13 @@ object AppMusicModels {
     implicit val jsonWriter = Json.writes[Track]
   }
 
-  case class Playlist(id: String, title: String, uri: String, imageUri: String, tracks: List[Track], origin: String)
+  case class Playlist(id: UUID, title: String, uri: String, imageUri: String, tracks: List[Track], origin: Origin)
 
   object Playlist {
     implicit val jsonWriter = Json.writes[Playlist]
   }
 
-  case class Album(id: Long, title: String, uri: String, cover: String, nbTracks: Int, tracks: List[Track], artist: Artist)
+  case class Album(id: UUID, title: String, uri: String, cover: String, nbTracks: Int, tracks: List[Track], artist: Artist, origin: Origin)
 
   object Album {
     implicit val jsonWriter = Json.writes[Album]
@@ -74,7 +83,7 @@ object AppMusicModels {
 
     implicit val playlistConverterSpotify: PlaylistConverter[SpotifyModels.Playlist] = new PlaylistConverter[SpotifyModels.Playlist] {
       override def convert(data: SpotifyModels.Playlist): Playlist = {
-        Playlist(data.id, data.name, data.uri, data.images.head.url, data.tracks.map(ConvertTrack.convert(_)), "spotify")
+        Playlist(UUID.randomUUID(), data.name, data.uri, data.images.head.url, data.tracks.map(ConvertTrack.convert(_)), Origin(data.id, "spotify"))
       }
     }
 
@@ -92,13 +101,20 @@ object AppMusicModels {
 
     implicit val playlistConverterDeezer: PlaylistConverter[DeezerModels.Playlist] = new PlaylistConverter[DeezerModels.Playlist] {
       def convert(data: DeezerModels.Playlist): Playlist = {
-        Playlist(data.id.toString, data.title, data.link, data.picture, data.tracks.map(ConvertTrack.convert(_)), "deezer")
+        Playlist(UUID.randomUUID(), data.title, data.link, data.picture, data.tracks.map(ConvertTrack.convert(_)), Origin(data.id.toString, "deezer"))
       }
     }
 
     implicit val albumConverterDeezer = new AlbumConverter[DeezerModels.Album] {
       def convert(data: DeezerModels.Album): Album = {
-        Album(data.id, data.title, data.link, data.cover, data.nbTracks, data.tracks.map(ConvertTrack.convert(_)), ConvertArtist.convert(data.artist))
+        Album(UUID.randomUUID(),
+          data.title,
+          data.link,
+          data.cover,
+          data.nbTracks,
+          data.tracks.map(ConvertTrack.convert(_)),
+          ConvertArtist.convert(data.artist),
+          Origin(data.id.toString, "deezer"))
       }
     }
   }
