@@ -11,11 +11,14 @@ class AlbumsService(streamingClients: Map[String, StreamingClient], persistence:
   def saveAlbum(internalId: String)(implicit ex: ExecutionContext) = {
     streamingClients.get("spotify").map { streamingClient =>
       getAlbumById(internalId).map {
-        case Some(album) => streamingClient.saveAlbum("2RV7dQWd4AWcOJKZwbbIcD")
-        case None => ()
+        case Some(album) =>
+          for {
+            spotifyAlbum <- streamingClient.albumLike(album.title, album.artists.head.name)
+            sdsd = streamingClient.saveAlbum(spotifyAlbum.right.get.id.toString)
+          } yield ()
+        case None => {}
       }
-    }
-  }
+    }  }
 
   def synchronize(userId: String, service: String)(implicit ec: ExecutionContext): Future[Either[String, Unit]] = {
     RedisLikeUsersDatabase.getUserId(userId, service).map { serviceId =>
