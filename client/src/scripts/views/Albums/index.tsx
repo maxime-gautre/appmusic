@@ -48,7 +48,10 @@ export class AlbumList extends React.Component<RouteComponentProps<Album>, State
 
     fetch('http://localhost:9000/api/synchronize', {
       method: 'POST',
-      body
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(body)
     }).then(r => console.log(r))
   }
 
@@ -59,9 +62,8 @@ export class AlbumList extends React.Component<RouteComponentProps<Album>, State
 
   render() {
     const albums = this.state.albums;
-    console.log(albums)
-    if(!albums || albums.length == 0) return null;
     const currentAlbum = this.state.albums[0];
+    console.log(albums)
     return (
       <div className="albumPageContainer">
         <div className="header">
@@ -78,53 +80,57 @@ export class AlbumList extends React.Component<RouteComponentProps<Album>, State
           </div>
 
         </div>
-        <div className="album-detail">
-          <div className="left">
-            <img src="https://e-cdns-images.dzcdn.net/images/cover/762492bbd649c33c63e8e0c1ba3cce4d/500x500-000000-80-0-0.jpg "/>
-            <div className="metadata">
-              <h3 className="title">
-                {currentAlbum.title}
-              </h3>
-              <div className="author">
-                Par {currentAlbum.artist.name}
+
+        {
+          (albums && albums.length !== 0) &&
+          <div className="album-detail">
+            <div className="left">
+              <img src="https://e-cdns-images.dzcdn.net/images/cover/762492bbd649c33c63e8e0c1ba3cce4d/500x500-000000-80-0-0.jpg "/>
+              <div className="metadata">
+                <h3 className="title">
+                  {currentAlbum.title}
+                </h3>
+                <div className="author">
+                  Par {currentAlbum.artist.name}
+                </div>
+                <div className="infos">
+                  2016 - {currentAlbum.nbTracks} titres, 41min
+                </div>
+                <div className="origin">
+                  Importé de {currentAlbum.origin.service}
+                </div>
               </div>
-              <div className="infos">
-                2016 - {currentAlbum.nbTracks} titres, 41min
+            </div>
+
+            <div className="right">
+              <div className="covers">
+                {albums.slice(1, 6).map((album: Album) => {
+                  return (
+                    <img key={album.id} src={album.cover}/>
+                  )
+                })
+                }
               </div>
-              <div className="origin">
-                Importé de {currentAlbum.origin.service}
+
+              <div className="tracks">
+                <ul>
+                { currentAlbum.tracks.map((track: Track) => {
+                  return (
+                    <li key={track.id}><span>{track.title}</span></li>
+                  )
+                })
+                }
+                </ul>
               </div>
             </div>
           </div>
-
-          <div className="right">
-            <div className="covers">
-              {albums.slice(1, 6).map((album: Album) => {
-                return (
-                  <img key={album.id} src={album.cover}/>
-                )
-              })
-              }
-            </div>
-
-            <div className="tracks">
-              <ul>
-              { currentAlbum.tracks.map((track: Track) => {
-                return (
-                  <li key={track.id}><span>{track.title}</span></li>
-                )
-              })
-              }
-              </ul>
-            </div>
-          </div>
-        </div>
+        }
       </div>
     )
   }
 
   componentDidMount() {
-    fetch("http://localhost:9000/api/albums", {
+    fetch('http://localhost:9000/api/albums', {
       method: 'GET',
     }).then( data => data.json()).then(data => this.setState({albums: data}))
   }

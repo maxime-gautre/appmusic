@@ -19,8 +19,7 @@ export const App = () => (
         runOnMount={ false }
         className="children-routes"
       >
-        <Route exact path="/albums" component={ AlbumList }>
-        </Route>
+        <Route exact path="/albums" component={ AlbumList }/>
         <Route exact path="/artistes" component={ Artists }/>
         <Route exact path="/playlists" component={ Playlists }/>
       </AnimatedSwitch>

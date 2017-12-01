@@ -27,7 +27,29 @@
         .albumPageContainer .header .search input:focus {
           border-color: grey; }
     .albumPageContainer .header .synchronize {
-      display: flex; }
+      display: flex;
+      color: white;
+      text-decoration: none;
+      border: none;
+      background-color: transparent;
+      padding: 15px 20px;
+      text-align: center;
+      line-height: 18px;
+      margin-top: 127px;
+      align-self: flex-start; }
+      .albumPageContainer .header .synchronize .left {
+        background-color: #333;
+        padding: inherit;
+        border-top-left-radius: 25px;
+        border-bottom-left-radius: 25px; }
+      .albumPageContainer .header .synchronize .right {
+        padding: inherit;
+        background-color: #333;
+        border-top-right-radius: 25px;
+        border-bottom-right-radius: 25px;
+        line-height: 18px; }
+      .albumPageContainer .header .synchronize:hover {
+        cursor: pointer; }
   .albumPageContainer .album-detail {
     padding-top: 85px;
     display: flex;
@@ -79,26 +101,3 @@
           line-height: 42px; }
           .albumPageContainer .album-detail .right .tracks li span {
             color: #242424; }
-      display: flex;
-      color: white;
-      text-decoration: none;
-      border: none;
-      background-color: transparent;
-      padding: 15px 20px;
-      text-align: center;
-      line-height: 18px;
-      margin-top: 127px;
-      align-self: flex-start; }
-      .albumPageContainer .header .synchronize .left {
-        background-color: #333;
-        padding: inherit;
-        border-top-left-radius: 25px;
-        border-bottom-left-radius: 25px; }
-      .albumPageContainer .header .synchronize .right {
-        padding: inherit;
-        background-color: #333;
-        border-top-right-radius: 25px;
-        border-bottom-right-radius: 25px;
-        line-height: 18px; }
-      .albumPageContainer .header .synchronize:hover {
-        cursor: pointer; }
