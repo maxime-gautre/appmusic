@@ -12,11 +12,10 @@ class AlbumsService(streamingClients: Map[String, StreamingClient], persistence:
     streamingClients.get("spotify").map { streamingClient =>
       getAlbumById(internalId).map {
         case Some(album) =>
-          streamingClient.saveAlbum(album.origin.id)
+            streamingClient.saveAlbum("2RV7dQWd4AWcOJKZwbbIcD")
         case None => {}
       }
-    }
-  }
+    }  }
 
   def synchronize(userId: String, service: String)(implicit ec: ExecutionContext): Future[Either[String, Unit]] = {
     RedisLikeUsersDatabase.getUserId(userId, service).map { serviceId =>
