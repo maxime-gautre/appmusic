@@ -68,4 +68,79 @@
       }
     }
   }
+
+  .album-detail {
+
+    padding-top: 85px;
+    display: flex;
+    flex-direction: row;
+
+    .left {
+      img {
+        box-shadow: 0 0 25px -5px #666;
+        width: 300px;
+        height: 300px;
+      }
+
+      .metadata {
+        margin-top: 50px;
+        .title {
+          font-size: 28px;
+          line-height: 33px;
+          color: #242424;
+          margin-bottom: 10px;
+        }
+        .author {
+          color: #BDBDBD;
+          font-size: 18px;
+          line-height: 21px;
+          margin-bottom: 10px;
+        }
+        .infos {
+          font-size: 18px;
+          line-height: 21px;
+          color: #828282;
+          margin-bottom: 30px;
+        }
+        .origin {
+          color: #000000;
+          font-size: 14px;
+          line-height: 16px;
+        }
+      }
+    }
+    .right {
+      margin-left: 70px;
+
+      .covers {
+        display: inline-block;
+        img {
+          width: 100px;
+          height: 100px;
+        }
+        img:not(:first-child) {
+          margin-left: 38px;
+        }
+      }
+
+      .tracks {
+        margin-top: 80px;
+        max-height: 300px;
+        overflow-y: scroll;
+        ul {
+          list-style-type: decimal;
+          margin-left: 25px;
+        }
+        li {
+          color: #BDBDBD;
+          span {
+            color: #242424;
+
+          }
+          font-size: 18px;
+          line-height: 42px;
+        }
+      }
+    }
+  }
 }

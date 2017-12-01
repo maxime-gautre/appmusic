@@ -35,7 +35,7 @@ object DeezerModels {
     implicit val jsonReads = Json.reads[PlaylistSimplified]
   }
 
-  case class AlbumSimplified(id: Long, title: String, link: String, cover: String, nb_tracks: Int, tracklist: String, artist: Artist)
+  case class AlbumSimplified(id: Long, title: String, link: String, cover_big: String, nb_tracks: Int, tracklist: String, artist: Artist)
 
   object AlbumSimplified {
     implicit val jsonReads = Json.reads[AlbumSimplified]
@@ -49,7 +49,7 @@ object DeezerModels {
         albumSimplified.id,
         albumSimplified.title,
         albumSimplified.link,
-        albumSimplified.cover,
+        albumSimplified.cover_big,
         albumSimplified.nb_tracks,
         tracklist,
         Artist(

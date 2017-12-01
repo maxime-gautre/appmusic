@@ -35,4 +35,12 @@ class MongoAlbumsPersistence(mongoConnection: MongoConnection, dbName: String) {
       albums <- collection.find(BSONDocument()).cursor[Album]().collect[List]()
     } yield albums
   }
+
+  def getAlbumById(id: String)(implicit  ex: ExecutionContext): Future[Option[Album]] = {
+    for {
+      collection <- albumCollection
+      album <- collection.find(BSONDocument("_id" -> id)).one[Album]
+    } yield album
+  }
+
 }

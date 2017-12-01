@@ -1,14 +1,17 @@
 package com.zengularity.appmusic.services
 
 import scala.concurrent.{ExecutionContext, Future}
-
 import persistence.{MongoAlbumsPersistence, RedisLikeUsersDatabase}
-
 import com.zengularity.appmusic.AppContext
 import com.zengularity.appmusic.models.AppMusicModels
+import com.zengularity.appmusic.models.AppMusicModels.Album
 import com.zengularity.appmusic.ws.{DeezerClient, SpotifyClient, StreamingClient}
 
 class AlbumsService(streamingClients: Map[String, StreamingClient], persistence: MongoAlbumsPersistence) {
+  def saveAlbum(id: String) = {
+
+  }
+
 
   def synchronize(userId: String, service: String)(implicit ec: ExecutionContext): Future[Either[String, Unit]] = {
     RedisLikeUsersDatabase.getUserId(userId, service).map { serviceId =>
@@ -22,6 +25,8 @@ class AlbumsService(streamingClients: Map[String, StreamingClient], persistence:
   }
 
   def albums(implicit ec: ExecutionContext): Future[List[AppMusicModels.Album]] = persistence.allAlbums
+
+  def getAlbumById(id: String)(implicit ex: ExecutionContext): Future[Option[Album]] = persistence.getAlbumById(id)
 }
 
 object AlbumsService {
@@ -29,7 +34,7 @@ object AlbumsService {
     new AlbumsService(
       Map(
         "deezer" -> new DeezerClient(appContext.wsClient, "https://api.deezer.com"),
-        "spotify" -> new SpotifyClient(appContext.wsClient, "https://api.spotify.com")
+        "spotify" -> new SpotifyClient(appContext.wsClient, "https://api.spotify.com/v1")
       ),
       new MongoAlbumsPersistence(appContext.mongoConnection, appContext.dbName)
     )

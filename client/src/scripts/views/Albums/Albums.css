@@ -27,6 +27,58 @@
         .albumPageContainer .header .search input:focus {
           border-color: grey; }
     .albumPageContainer .header .synchronize {
+      display: flex; }
+  .albumPageContainer .album-detail {
+    padding-top: 85px;
+    display: flex;
+    flex-direction: row; }
+    .albumPageContainer .album-detail .left img {
+      box-shadow: 0 0 25px -5px #666;
+      width: 300px;
+      height: 300px; }
+    .albumPageContainer .album-detail .left .metadata {
+      margin-top: 50px; }
+      .albumPageContainer .album-detail .left .metadata .title {
+        font-size: 28px;
+        line-height: 33px;
+        color: #242424;
+        margin-bottom: 10px; }
+      .albumPageContainer .album-detail .left .metadata .author {
+        color: #BDBDBD;
+        font-size: 18px;
+        line-height: 21px;
+        margin-bottom: 10px; }
+      .albumPageContainer .album-detail .left .metadata .infos {
+        font-size: 18px;
+        line-height: 21px;
+        color: #828282;
+        margin-bottom: 30px; }
+      .albumPageContainer .album-detail .left .metadata .origin {
+        color: #000000;
+        font-size: 14px;
+        line-height: 16px; }
+    .albumPageContainer .album-detail .right {
+      margin-left: 70px; }
+      .albumPageContainer .album-detail .right .covers {
+        display: inline-block; }
+        .albumPageContainer .album-detail .right .covers img {
+          width: 100px;
+          height: 100px; }
+        .albumPageContainer .album-detail .right .covers img:not(:first-child) {
+          margin-left: 38px; }
+      .albumPageContainer .album-detail .right .tracks {
+        margin-top: 80px;
+        max-height: 300px;
+        overflow-y: scroll; }
+        .albumPageContainer .album-detail .right .tracks ul {
+          list-style-type: decimal;
+          margin-left: 25px; }
+        .albumPageContainer .album-detail .right .tracks li {
+          color: #BDBDBD;
+          font-size: 18px;
+          line-height: 42px; }
+          .albumPageContainer .album-detail .right .tracks li span {
+            color: #242424; }
       display: flex;
       color: white;
       text-decoration: none;

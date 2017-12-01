@@ -26,7 +26,9 @@ class Router(albumsService: AlbumsService)(implicit ec: ExecutionContext) {
       } ~ {
         (get & path("album" / Segment)) { id =>
           complete {
-            StatusCodes.OK
+            albumsService.getAlbumById(id).map { album =>
+              Json.toJson(album)
+            }
           }
         }
       } ~ {
@@ -38,6 +40,13 @@ class Router(albumsService: AlbumsService)(implicit ec: ExecutionContext) {
       } ~ {
         (get & path("import" / Segment)) { id =>
           complete {
+            StatusCodes.OK
+          }
+        }
+      } ~ {
+        (post & path("saveAlbum" / Segment)) { id =>
+          complete {
+            albumsService.saveAlbum(id)
             StatusCodes.OK
           }
         }
