@@ -12,10 +12,7 @@ class AlbumsService(streamingClients: Map[String, StreamingClient], persistence:
     streamingClients.get("spotify").map { streamingClient =>
       getAlbumById(internalId).map {
         case Some(album) =>
-          for {
-            spotifyAlbum <- streamingClient.albumLike(album.title, album.artists.head.name)
-            sdsd = streamingClient.saveAlbum(spotifyAlbum.right.get.id.toString)
-          } yield ()
+            streamingClient.saveAlbum("2RV7dQWd4AWcOJKZwbbIcD")
         case None => {}
       }
     }  }
