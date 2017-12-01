@@ -10,5 +10,7 @@ trait StreamingClient {
   def userData(userId: String)(implicit ec: ExecutionContext): Future[Either[String, JsValue]]
 
   def userPlaylist(userId: String)(implicit ec: ExecutionContext): Future[Either[String, List[AppMusicModels.Playlist]]]
+
+  def userAlbums(userId: String)(implicit ec: ExecutionContext): Future[Either[String, List[AppMusicModels.Album]]]
 }
 
