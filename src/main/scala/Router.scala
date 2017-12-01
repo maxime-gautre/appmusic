@@ -29,6 +29,15 @@ class Router(deezerClient: StreamingClient)(implicit ec: ExecutionContext) {
             }
           }
         }
+      } ~ {
+        (get & path("user" / Segment / "albums")) { id =>
+          complete {
+            deezerClient.userAlbums(id).map {
+              case Left(err) => (StatusCodes.BadRequest, Json.obj("error" -> err))
+              case Right(albums) => (StatusCodes.OK, Json.toJson(albums))
+            }
+          }
+        }
       }
     }
   }

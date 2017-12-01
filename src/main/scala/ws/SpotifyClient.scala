@@ -62,4 +62,6 @@ class SpotifyClient(wsClient: StandaloneAhcWSClient, spotifyEndPoint: String) ex
     get(s"$spotifyEndPoint/users/$userId/albums");
     ???
   }
+
+  def userAlbums(userId: String)(implicit ec: ExecutionContext): Future[Either[String, List[AppMusicModels.Album]]] = ???
 }

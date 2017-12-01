@@ -3,26 +3,21 @@ package com.zengularity.appmusic.models
 import play.api.libs.json.Json
 
 object DeezerModels {
-  case class Artist(id: Int, name: String, link: String)
+  case class Artist(id: Long, name: String)
 
   object Artist {
     implicit val jsonReads = Json.reads[Artist]
-    implicit val jsonWriter = Json.writes[Artist]
   }
 
   case class Track(id: Long, title: String, link: String, duration: Int, artist: Artist)
 
   object Track {
     implicit val jsonReads = Json.reads[Track]
-    implicit val jsonWriter = Json.writes[Track]
   }
 
   case class Playlist(id: Long, title: String, link: String, picture: String, tracks: List[Track])
 
   object Playlist {
-    implicit val jsonReads = Json.reads[Playlist]
-    implicit val jsonWriter = Json.writes[Playlist]
-
     def fromSimplified(playlistSimplified: PlaylistSimplified, tracklist: List[Track]) = {
       Playlist(
         playlistSimplified.id,
@@ -38,7 +33,31 @@ object DeezerModels {
 
   object PlaylistSimplified {
     implicit val jsonReads = Json.reads[PlaylistSimplified]
-    implicit val jsonWriter = Json.writes[PlaylistSimplified]
+  }
+
+  case class AlbumSimplified(id: Long, title: String, link: String, cover: String, nb_tracks: Int, tracklist: String, artist: Artist)
+
+  object AlbumSimplified {
+    implicit val jsonReads = Json.reads[AlbumSimplified]
+  }
+
+  case class Album(id: Long, title: String, link: String, cover: String, nbTracks: Int, tracks: List[Track], artist: Artist)
+
+  object Album {
+    def fromSimplified(albumSimplified: AlbumSimplified, tracklist: List[Track]): Album = {
+      Album(
+        albumSimplified.id,
+        albumSimplified.title,
+        albumSimplified.link,
+        albumSimplified.cover,
+        albumSimplified.nb_tracks,
+        tracklist,
+        Artist(
+          albumSimplified.artist.id,
+          albumSimplified.artist.name
+        )
+      )
+    }
   }
 }
 
