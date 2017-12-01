@@ -10,10 +10,16 @@ object SpotifyModels {
     implicit val jsonReads = Json.reads[Artist]
   }
 
-  case class Track(id: String, title: String, uri: String, duration_ms: Int, artists: List[Artist])
+  case class Track(id: String, name: String, uri: String, duration_ms: Int, artists: List[Artist])
 
   object Track {
     implicit val jsonReads = Json.reads[Track]
+  }
+
+  case class TrackList(href: String, items: List[Track])
+
+  object TrackList {
+    implicit val jsonReads = Json.reads[TrackList]
   }
 
   case class Image(url: String, height: Int, width: Int)
@@ -26,6 +32,18 @@ object SpotifyModels {
 
   object Playlist {
     implicit val jsonReads = Json.reads[Playlist]
+  }
+
+  case class AlbumSimplified(id: String, name: String, uri: String)
+
+  object AlbumSimplified {
+    implicit val jsonReads = Json.reads[AlbumSimplified]
+  }
+
+  case class Album(id: String, name: String, uri: String, images: List[Image], tracks: TrackList, artists: List[Artist])
+
+  object Album {
+    implicit val jsonReads = Json.reads[Album]
   }
 }
 

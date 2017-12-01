@@ -38,7 +38,7 @@ object AppMusicModels {
     implicit val bsonHandler = Macros.handler[Playlist]
   }
 
-  case class Album(id: UUID, title: String, uri: String, cover: String, nbTracks: Int, tracks: List[Track], artist: Artist, origin: Origin)
+  case class Album(id: UUID, title: String, uri: String, cover: String, nbTracks: Int, tracks: List[Track], artists: List[Artist], origin: Origin)
 
   object Album {
     implicit val jsonWriter = Json.writes[Album]
@@ -86,13 +86,19 @@ object AppMusicModels {
 
     implicit val trackConverterSpotify: TrackConverter[SpotifyModels.Track] = new TrackConverter[SpotifyModels.Track] {
       override def convert(data: SpotifyModels.Track): Track = {
-        Track(data.id, data.title, data.uri, data.duration_ms / 1000, data.artists.map(ConvertArtist.convert(_)))
+        Track(data.id, data.name, data.uri, data.duration_ms / 1000, data.artists.map(ConvertArtist.convert(_)))
       }
     }
 
     implicit val playlistConverterSpotify: PlaylistConverter[SpotifyModels.Playlist] = new PlaylistConverter[SpotifyModels.Playlist] {
       override def convert(data: SpotifyModels.Playlist): Playlist = {
         Playlist(UUID.randomUUID(), data.name, data.uri, data.images.head.url, data.tracks.map(ConvertTrack.convert(_)), Origin(data.id, "spotify"))
+      }
+    }
+
+    implicit val albumConverterSpotify: AlbumConverter[SpotifyModels.Album] = new AlbumConverter[SpotifyModels.Album] {
+      override def convert(data: SpotifyModels.Album): Album = {
+        Album(UUID.randomUUID(), data.name, data.uri, data.images(0).url, data.tracks.items.length, data.tracks.items.map(ConvertTrack.convert(_)), data.artists.map(ConvertArtist.convert(_)), Origin(data.id, "spotify"))
       }
     }
 
@@ -114,7 +120,7 @@ object AppMusicModels {
       }
     }
 
-    implicit val albumConverterDeezer = new AlbumConverter[DeezerModels.Album] {
+    implicit val albumConverterDeezer: AlbumConverter[DeezerModels.Album] = new AlbumConverter[DeezerModels.Album] {
       def convert(data: DeezerModels.Album): Album = {
         Album(UUID.randomUUID(),
           data.title,
@@ -122,7 +128,7 @@ object AppMusicModels {
           data.cover,
           data.nbTracks,
           data.tracks.map(ConvertTrack.convert(_)),
-          ConvertArtist.convert(data.artist),
+          List(ConvertArtist.convert(data.artist)),
           Origin(data.id.toString, "deezer"))
       }
     }
