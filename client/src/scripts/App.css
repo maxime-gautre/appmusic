@@ -2,7 +2,8 @@
   display: flex; }
 
 .children-routes {
-  width: 100%; }
+  width: 100%;
+  background-color: #E5E5E5; }
 
 .main-sidebar {
   min-width: calc(312px - 100px);
@@ -57,3 +58,13 @@
       margin: 0 25px; }
     .main-sidebar .userDisplay .infos .userEmail {
       color: #4F4F4F; }
+
+.dashboard {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+  .dashboard h1 {
+    font-size: 50px;
+    color: white;
+    text-shadow: 1px 1px 5px #555; }

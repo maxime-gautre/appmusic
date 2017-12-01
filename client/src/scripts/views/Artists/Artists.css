@@ -1,7 +1,13 @@
 .artistPageContainer {
   background-color: #E5E5E5;
   height: 100vh;
-  padding: 50px; }
+  color: white;
+  text-shadow: 1px 1px 5px #555;
+  justify-content: center;
+  align-items: center;
+  display: flex; }
+  .artistPageContainer h1 {
+    font-size: 50px; }
   .artistPageContainer .header {
     display: flex;
     flex-flow: row nowrap;
@@ -10,8 +16,5 @@
     .artistPageContainer .header .search {
       display: flex;
       flex-flow: column nowrap; }
-      .artistPageContainer .header .search h1 {
-        font-size: 28px;
-        line-height: 33px; }
     .artistPageContainer .header .synchronize {
       display: flex; }

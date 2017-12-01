@@ -7,7 +7,10 @@ $blue: #2F80ED;
   display: flex;
 }
 
-.children-routes { width: 100%; }
+.children-routes {
+  width: 100%;
+  background-color: #E5E5E5;
+}
 
 .main-sidebar {
   min-width: calc(312px - 100px);
@@ -79,5 +82,18 @@ $blue: #2F80ED;
     .infos {
       .userEmail { color: $grey; }
     }
+  }
+}
+
+.dashboard {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  h1 {
+    font-size: 50px;
+    color: white;
+    text-shadow: 1px 1px 5px #555;
   }
 }
