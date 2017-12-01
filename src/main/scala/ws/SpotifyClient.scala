@@ -15,8 +15,6 @@ class SpotifyClient(wsClient: StandaloneAhcWSClient, spotifyEndPoint: String) ex
 
   private final val OAUTH_CLIENT_ID: String = "72a27ca374f84ad09e643d29a58ba8ae"
   private final val OAUTH_CLIENT_SECRET: String = "fa6b4f4d89754c1a993216beae469f6c"
-  private final val OAUTH_CODE: String = "AQDS8jC5kKOQE-Z1g-td1ScCpdYb9lw0bRT3ddwzgJvweMUoI9XSTyDFySKhpOvCWA2G_Tj-R6Lu-P8ETIuLng6oOPO8k-qZ548aDphppPCcKzraLUwbUpikdREqvy4t40HHsAkp1aIdO22PrYgCm_QmafJgpWH56gz_gKFS8ne-G6THI94L68ChI_reZRvLjFXkuxg6Uang2fiRTEYF3RLcEcuTRoY8ZbbWr9_KNHc2ye8cVi8JtVw"
-  private final val OAUTH_REDIRECT_URI: String = "http://localhost:8888/callback/"
   private final val OAUTH_REFRESH_TOKEN: String = "AQCHdgYFcB6F87UXxpvloUAQIdUhrr7cc-wmHyUg95K9p_a-4IzHVTnO432trgrpwQUMlQSOoX6QsbmiS-GmegI4U9i5dkRtW5uZnepE_TsGXGg0H-qxJ9g3ZnK6v1ahJAw"
 
   private var accessToken: String = "FAKE" // TODO Default null value and handle it in get()
