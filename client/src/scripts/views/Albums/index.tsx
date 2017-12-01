@@ -102,8 +102,8 @@ export class AlbumList extends React.Component<RouteComponentProps<Album>, State
                   Importé de {currentAlbum.origin.service}
                 </div>
               </div>
-              <div>
-                <button className="button" onClick={() => this.syncAlbum(currentAlbum.id)}>Synchroniser dans Spotify</button>
+              <div className="button-sync">
+                <button onClick={() => this.syncAlbum(currentAlbum.id)}>Synchroniser dans Spotify</button>
               </div>
             </div>
 

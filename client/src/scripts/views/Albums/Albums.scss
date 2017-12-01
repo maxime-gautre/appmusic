@@ -20,7 +20,9 @@
         line-height: 33px;
       }
 
-      p { color: grey }
+      p {
+        color: grey
+      }
 
       input {
         border-radius: 25px;
@@ -70,6 +72,17 @@
   }
 
   .album-detail {
+
+    .button-sync {
+      text-align: center;
+      button {
+        margin-top: 10px;
+        border-radius: 25px;
+        padding: 10px 15px;
+        background-color: transparent;
+        border-color: #333;
+      }
+    }
 
     padding-top: 85px;
     display: flex;

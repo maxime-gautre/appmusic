@@ -54,6 +54,14 @@
     padding-top: 85px;
     display: flex;
     flex-direction: row; }
+    .albumPageContainer .album-detail .button-sync {
+      text-align: center; }
+      .albumPageContainer .album-detail .button-sync button {
+        margin-top: 10px;
+        border-radius: 25px;
+        padding: 10px 15px;
+        background-color: transparent;
+        border-color: #333; }
     .albumPageContainer .album-detail .left img {
       box-shadow: 0 0 25px -5px #666;
       width: 300px;
