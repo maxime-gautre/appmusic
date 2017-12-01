@@ -15,8 +15,8 @@ class SpotifyClient(wsClient: StandaloneAhcWSClient, spotifyEndPoint: String) ex
 
   private final val OAUTH_CLIENT_ID: String = "72a27ca374f84ad09e643d29a58ba8ae"
   private final val OAUTH_CLIENT_SECRET: String = "fa6b4f4d89754c1a993216beae469f6c"
-  private final val OAUTH_REFRESH_TOKEN: String = "AQCHdgYFcB6F87UXxpvloUAQIdUhrr7cc-wmHyUg95K9p_a-4IzHVTnO432trgrpwQUMlQSOoX6QsbmiS-GmegI4U9i5dkRtW5uZnepE_TsGXGg0H-qxJ9g3ZnK6v1ahJAw"
-
+  private final val OAUTH_REFRESH_TOKEN: String = "AQD8PFCjjmMJh2Y9KWSatQ1KN5yi1MTgVjv5e0j9y_wrrF0qUeIWDFiGXexFIltENqv42brmYVKTPKI3jX9edSLpDU9me8eHJcFotwOtBgfbkoXp_1RIB5BawmNrvJEb4Jg"
+  
   private var accessToken: String = "FAKE" // TODO Default null value and handle it in get()
 
   private def parseResponse(body: String): Either[String, JsValue] = {
@@ -31,6 +31,17 @@ class SpotifyClient(wsClient: StandaloneAhcWSClient, spotifyEndPoint: String) ex
       response.status match {
         case 401 => refreshToken().flatMap { _ =>
           get(path, params:_*)
+        }
+        case _ => Future.successful(parseResponse(response.body))
+      }
+    }
+  }
+
+  private def put(path: String, params: (String, String)*)(implicit ec: ExecutionContext): Future[Either[String, JsValue]] = {
+    wsClient.url(s"$spotifyEndPoint/$path").addHttpHeaders(("Authorization", s"Bearer ${accessToken}")).withQueryStringParameters(params:_*).put("").flatMap { response =>
+      response.status match {
+        case 401 => refreshToken().flatMap { _ =>
+          put(path, params:_*)
         }
         case _ => Future.successful(parseResponse(response.body))
       }
@@ -63,6 +74,10 @@ class SpotifyClient(wsClient: StandaloneAhcWSClient, spotifyEndPoint: String) ex
 
   def userAlbums(userId: String)(implicit ec: ExecutionContext): Future[Either[String, List[AppMusicModels.Album]]] = ???
 
+  def saveAlbum(id: String)(implicit ec: ExecutionContext): Unit = {
+    put("me/albums", ("ids", id))
+  }
+
   def album(id: String)(implicit ec: ExecutionContext): Future[Either[String, AppMusicModels.Album]] = {
     get(s"albums/$id").flatMap {
       case Right(json) => {
@@ -90,9 +105,5 @@ class SpotifyClient(wsClient: StandaloneAhcWSClient, spotifyEndPoint: String) ex
       }
       case Left(err) => Future.successful(Left(err))
     }
-  }
-
-  override def saveAlbum(id: String)(implicit ec: ExecutionContext) = {
-    
   }
 }
