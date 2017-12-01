@@ -72,7 +72,7 @@ export class AlbumList extends React.Component<RouteComponentProps<Album>, State
                 {currentAlbum.title}
               </h3>
               <div className="author">
-                Par {currentAlbum.artist.name}
+                Par {currentAlbum.artist && currentAlbum.artist.name}
               </div>
               <div className="infos">
                 2016 - {currentAlbum.nbTracks} titres, 41min
