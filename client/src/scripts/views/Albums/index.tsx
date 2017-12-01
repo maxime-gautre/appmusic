@@ -75,7 +75,9 @@ export class AlbumList extends React.Component<RouteComponentProps<Album>, State
                 Par {currentAlbum.artist && currentAlbum.artist.name}
               </div>
               <div className="infos">
-                2016 - {currentAlbum.nbTracks} titres, 41min
+                2016 - {currentAlbum.nbTracks} titres, {this.computeDuration(currentAlbum.tracks.reduce((prev, current) => {
+                  return current.duration + prev;
+              }, 0))}
               </div>
               <div className="origin">
                 Importé de {currentAlbum.origin.service}
@@ -107,6 +109,15 @@ export class AlbumList extends React.Component<RouteComponentProps<Album>, State
         </div>
       </div>
     )
+  }
+
+  computeDuration(totalSeconds: number) {
+
+    const hours = Math.floor(totalSeconds / 3600);
+    const totalSecondsBis = totalSeconds % 3600;
+    const minutes = Math.floor(totalSecondsBis / 60);
+    const seconds = totalSecondsBis % 60;
+    return hours + "h" + minutes + "m" + seconds + "s";
   }
 
   componentDidMount() {
