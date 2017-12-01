@@ -3,13 +3,13 @@ package com.zengularity.appmusic.ws
 import java.nio.charset.StandardCharsets
 
 import com.typesafe.scalalogging.Logger
-import play.api.libs.json.{JsValue, Json}
+import com.zengularity.appmusic.models.{AppMusicModels, SpotifyModels}
+import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import play.api.libs.ws.DefaultBodyWritables._
 import play.api.libs.ws.ahc.StandaloneAhcWSClient
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
-
-import com.zengularity.appmusic.models.AppMusicModels
 
 class SpotifyClient(wsClient: StandaloneAhcWSClient, spotifyEndPoint: String) extends StreamingClient {
 
@@ -65,7 +65,32 @@ class SpotifyClient(wsClient: StandaloneAhcWSClient, spotifyEndPoint: String) ex
 
   def userAlbums(userId: String)(implicit ec: ExecutionContext): Future[Either[String, List[AppMusicModels.Album]]] = ???
 
-  def album(name: String, artist: String)(implicit ec: ExecutionContext): Future[Either[String, JsValue]] = {
-    get("search", ("type", "album"), ("q", s"""album:"$name" artist:"$artist""""));
+  def album(id: String)(implicit ec: ExecutionContext): Future[Either[String, AppMusicModels.Album]] = {
+    get(s"albums/$id").flatMap {
+      case Right(json) => {
+        Logger(getClass).info(s"BOOM 2 ${json.toString()}")
+        val albumResult = json.validate[SpotifyModels.Album]
+        val res = albumResult match {
+          case JsSuccess(album, _) => Right(AppMusicModels.ConvertAlbum.convert(album)(AppMusicModels.Instances.albumConverterSpotify))
+          case JsError(errors) => Left(JsError.toJson(errors).toString())
+        }
+        Future.successful(res)
+      }
+      case Left(err) => Future.successful(Left(err))
+    }
+  }
+
+  def albumLike(name: String, artist: String)(implicit ec: ExecutionContext): Future[Either[String, AppMusicModels.Album]] = {
+    get("search", ("type", "album"), ("q", s"""album:"$name" artist:"$artist"""")).flatMap {
+      case Right(json) => {
+        val albumResult = (json \ "albums" \ "items").validate[Seq[SpotifyModels.AlbumSimplified]]
+        albumResult match {
+          case JsSuccess(Nil, _) => Future.successful(Left("Empty album"))
+          case JsSuccess(albumSimplified :: _, _) => album(albumSimplified.id)
+          case JsError(errors) => Future.successful(Left(JsError.toJson(errors).toString()))
+        }
+      }
+      case Left(err) => Future.successful(Left(err))
+    }
   }
 }

@@ -71,5 +71,7 @@ class DeezerClient(wsClient: StandaloneAhcWSClient, deezerEndPoint: String) exte
     }
   }.map(_.map(_.map(AppMusicModels.ConvertAlbum.convert(_)(AppMusicModels.Instances.albumConverterDeezer))))
 
-  def album(name: String, artist: String)(implicit ec: ExecutionContext): Future[Either[String, JsValue]] = ???
+  override def album(id: String)(implicit ec: ExecutionContext): Future[Either[String, AppMusicModels.Album]] = ???
+
+  override def albumLike(name: String, artist: String)(implicit ec: ExecutionContext): Future[Either[String, AppMusicModels.Album]] = ???
 }
