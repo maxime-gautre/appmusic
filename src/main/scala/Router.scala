@@ -1,44 +1,53 @@
 package com.zengularity.appmusic
 
+import scala.concurrent.ExecutionContext
+
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
-import com.zengularity.appmusic.services.BusinessService
-import com.zengularity.appmusic.ws.StreamingClient
-import de.heikoseeberger.akkahttpplayjson.PlayJsonSupport._
+
 import play.api.libs.json.Json
 
-import scala.concurrent.ExecutionContext
+import de.heikoseeberger.akkahttpplayjson.PlayJsonSupport._
 
-class Router(businessService: BusinessService)(implicit ec: ExecutionContext) {
+import com.zengularity.appmusic.models.SynchronizeBody
+import com.zengularity.appmusic.services.AlbumsService
+
+class Router(albumsService: AlbumsService)(implicit ec: ExecutionContext) {
 
   val instance: Route = {
     pathPrefix("api") {
       (get & path("albums")) {
         complete {
-          businessService.getAllAlbums()
-          StatusCodes.OK
+          albumsService.albums.map { albums =>
+            Json.toJson(albums)
+          }
         }
-      }
-    } ~ {
-      (get & path("album" / Segment )) { id =>
-        complete {
-          businessService.getAlbumDetails()
-          StatusCodes.OK
+      } ~ {
+        (get & path("album" / Segment)) { id =>
+          complete {
+            StatusCodes.OK
+          }
         }
-      }
-    } ~ {
-      (get & path("sync")) {
-        complete {
-          businessService.sync()
-          StatusCodes.OK
+      } ~ {
+        (get & path("sync")) {
+          complete {
+            StatusCodes.OK
+          }
         }
-      }
-    } ~ {
-      (get & path("export" / Segment )) { id =>
-        complete {
-          businessService.exportToExternalService()
-          StatusCodes.OK
+      } ~ {
+        (get & path("import" / Segment)) { id =>
+          complete {
+            StatusCodes.OK
+          }
+        }
+      } ~ {
+        (post & path("synchronize") & entity(as[SynchronizeBody])) { synchronizeBody =>
+          complete {
+            albumsService.synchronize(synchronizeBody.id, synchronizeBody.service).map { _ =>
+              StatusCodes.OK -> Json.obj("Synchronized" -> "Ok")
+            }
+          }
         }
       }
     }

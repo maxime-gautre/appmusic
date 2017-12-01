@@ -4,36 +4,45 @@ import java.util.UUID
 
 import play.api.libs.json.Json
 
+import reactivemongo.bson.Macros
+
 object AppMusicModels {
+
+  import helpers.BsonHelpers.bsonUUID
 
   case class Origin(id: String, service: String)
 
   object Origin {
     implicit val jsonWrites = Json.writes[Origin]
+    implicit val bsonHandler = Macros.handler[Origin]
   }
 
   case class Artist(id: String, name: String)
 
   object Artist {
     implicit val jsonWriter = Json.writes[Artist]
+    implicit val bsonHandler = Macros.handler[Artist]
   }
 
   case class Track(id: String, title: String, uri: String, duration: Int, artists: List[Artist])
 
   object Track {
     implicit val jsonWriter = Json.writes[Track]
+    implicit val bsonHandler = Macros.handler[Track]
   }
 
   case class Playlist(id: UUID, title: String, uri: String, imageUri: String, tracks: List[Track], origin: Origin)
 
   object Playlist {
     implicit val jsonWriter = Json.writes[Playlist]
+    implicit val bsonHandler = Macros.handler[Playlist]
   }
 
   case class Album(id: UUID, title: String, uri: String, cover: String, nbTracks: Int, tracks: List[Track], artist: Artist, origin: Origin)
 
   object Album {
     implicit val jsonWriter = Json.writes[Album]
+    implicit val bsonHandler = Macros.handler[Album]
   }
 
   trait ArtistConverter[A] {
