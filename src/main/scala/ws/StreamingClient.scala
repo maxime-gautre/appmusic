@@ -12,6 +12,6 @@ trait StreamingClient {
   def userAlbums(userId: String)(implicit ec: ExecutionContext): Future[Either[String, List[AppMusicModels.Album]]]
   def album(id: String)(implicit  ec: ExecutionContext): Future[Either[String, AppMusicModels.Album]]
   def albumLike(name: String, artist: String)(implicit  ec: ExecutionContext): Future[Either[String, AppMusicModels.Album]]
-  def saveAlbum(id: String)(implicit  ec: ExecutionContext): Unit
+  def saveAlbum(id: String)(implicit  ec: ExecutionContext)
 }
 

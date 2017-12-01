@@ -37,6 +37,17 @@ class SpotifyClient(wsClient: StandaloneAhcWSClient, spotifyEndPoint: String) ex
     }
   }
 
+  private def put(path: String, params: (String, String)*)(implicit ec: ExecutionContext): Future[Either[String, JsValue]] = {
+    wsClient.url(s"$spotifyEndPoint/$path").addHttpHeaders(("Authorization", s"Bearer ${accessToken}")).withQueryStringParameters(params:_*).put("").flatMap { response =>
+      response.status match {
+        case 401 => refreshToken().flatMap { _ =>
+          put(path, params:_*)
+        }
+        case _ => Future.successful(parseResponse(response.body))
+      }
+    }
+  }
+
   private def refreshToken()(implicit ec: ExecutionContext): Future[Unit] = {
     val body = Map (
       "grant_type" -> "refresh_token",
@@ -62,6 +73,10 @@ class SpotifyClient(wsClient: StandaloneAhcWSClient, spotifyEndPoint: String) ex
   }
 
   def userAlbums(userId: String)(implicit ec: ExecutionContext): Future[Either[String, List[AppMusicModels.Album]]] = ???
+
+  def saveAlbum(id: String)(implicit ec: ExecutionContext): Unit = {
+    put("me/albums", ("ids", id))
+  }
 
   def album(id: String)(implicit ec: ExecutionContext): Future[Either[String, AppMusicModels.Album]] = {
     get(s"albums/$id").flatMap {
@@ -90,9 +105,5 @@ class SpotifyClient(wsClient: StandaloneAhcWSClient, spotifyEndPoint: String) ex
       }
       case Left(err) => Future.successful(Left(err))
     }
-  }
-
-  override def saveAlbum(id: String)(implicit ec: ExecutionContext) = {
-    
   }
 }
