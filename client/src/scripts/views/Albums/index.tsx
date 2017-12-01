@@ -137,7 +137,7 @@ export class AlbumList extends React.Component<RouteComponentProps<Album>, State
     const totalSecondsBis = totalSeconds % 3600;
     const minutes = Math.floor(totalSecondsBis / 60);
     const seconds = totalSecondsBis % 60;
-    return hours + "h" + minutes + "m" + seconds + "s";
+    return hours + 'h' + minutes + 'm' + seconds + 's';
   }
 
   componentDidMount() {
