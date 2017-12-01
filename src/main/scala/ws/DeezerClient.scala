@@ -8,7 +8,7 @@ import play.api.libs.ws.ahc.StandaloneAhcWSClient
 
 import com.zengularity.appmusic.models.{AppMusicModels, DeezerModels}
 
-class DeezerAhcClient(wsClient: StandaloneAhcWSClient, deezerEndPoint: String) extends StreamingClient {
+class DeezerClient(wsClient: StandaloneAhcWSClient, deezerEndPoint: String) extends StreamingClient {
 
   private def parseResponse[A: Reads](body: String): Either[String, A] = {
     Try(Json.parse(body)).map { data =>
