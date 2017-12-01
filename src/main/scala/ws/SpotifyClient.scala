@@ -28,11 +28,11 @@ class SpotifyClient(wsClient: StandaloneAhcWSClient, spotifyEndPoint: String) ex
     }
   }
 
-  private def get(url: String)(implicit ec: ExecutionContext): Future[Either[String, JsValue]] = {
-    wsClient.url(url).addHttpHeaders(("Authorization", s"Bearer ${accessToken}")).get().flatMap { response =>
+  private def get(path: String, params: (String, String)*)(implicit ec: ExecutionContext): Future[Either[String, JsValue]] = {
+    wsClient.url(s"$spotifyEndPoint/$path").addHttpHeaders(("Authorization", s"Bearer ${accessToken}")).withQueryStringParameters(params:_*).get().flatMap { response =>
       response.status match {
         case 401 => refreshToken().flatMap { _ =>
-          get(url)
+          get(path, params:_*)
         }
         case _ => Future.successful(parseResponse(response.body))
       }
@@ -55,13 +55,17 @@ class SpotifyClient(wsClient: StandaloneAhcWSClient, spotifyEndPoint: String) ex
   }
 
   def userData(userId: String)(implicit ec: ExecutionContext): Future[Either[String, JsValue]] = {
-    get(s"$spotifyEndPoint/users/$userId");
+    get(s"users/$userId");
   }
 
   def userPlaylist(userId: String)(implicit ec: ExecutionContext): Future[Either[String, List[AppMusicModels.Playlist]]] = {
-    get(s"$spotifyEndPoint/users/$userId/albums");
+    get(s"users/$userId/albums");
     ???
   }
 
   def userAlbums(userId: String)(implicit ec: ExecutionContext): Future[Either[String, List[AppMusicModels.Album]]] = ???
+
+  def album(name: String, artist: String)(implicit ec: ExecutionContext): Future[Either[String, JsValue]] = {
+    get("search", ("type", "album"), ("q", s"""album:"$name" artist:"$artist""""));
+  }
 }

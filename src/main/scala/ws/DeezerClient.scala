@@ -55,7 +55,6 @@ class DeezerClient(wsClient: StandaloneAhcWSClient, deezerEndPoint: String) exte
     }
   }.map(_.map(_.map(AppMusicModels.ConvertPlaylist.convert(_)(AppMusicModels.Instances.playlistConverterDeezer))))
 
-
   def userAlbums(userId: String)(implicit ec: ExecutionContext): Future[Either[String, List[AppMusicModels.Album]]] = {
 
     wsClient.url(s"$deezerEndPoint/user/$userId/albums").get().map { response =>
@@ -71,4 +70,6 @@ class DeezerClient(wsClient: StandaloneAhcWSClient, deezerEndPoint: String) exte
       case Left(err) => Future.successful(Left(err))
     }
   }.map(_.map(_.map(AppMusicModels.ConvertAlbum.convert(_)(AppMusicModels.Instances.albumConverterDeezer))))
+
+  def album(name: String, artist: String)(implicit ec: ExecutionContext): Future[Either[String, JsValue]] = ???
 }
