@@ -44,6 +44,13 @@ class Router(albumsService: AlbumsService)(implicit ec: ExecutionContext) {
           }
         }
       } ~ {
+        (post & path("saveAlbum" / Segment)) { id =>
+          complete {
+            albumsService.saveAlbum(id)
+            StatusCodes.OK
+          }
+        }
+      } ~ {
         (post & path("synchronize") & entity(as[SynchronizeBody])) { synchronizeBody =>
           complete {
             albumsService.synchronize(synchronizeBody.id, synchronizeBody.service).map { _ =>

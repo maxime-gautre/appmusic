@@ -74,4 +74,8 @@ class DeezerClient(wsClient: StandaloneAhcWSClient, deezerEndPoint: String) exte
   override def album(id: String)(implicit ec: ExecutionContext): Future[Either[String, AppMusicModels.Album]] = ???
 
   override def albumLike(name: String, artist: String)(implicit ec: ExecutionContext): Future[Either[String, AppMusicModels.Album]] = ???
+
+  override def saveAlbum(id: String)(implicit ec: ExecutionContext) = {
+
+  }
 }

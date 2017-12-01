@@ -91,4 +91,8 @@ class SpotifyClient(wsClient: StandaloneAhcWSClient, spotifyEndPoint: String) ex
       case Left(err) => Future.successful(Left(err))
     }
   }
+
+  override def saveAlbum(id: String)(implicit ec: ExecutionContext) = {
+    
+  }
 }

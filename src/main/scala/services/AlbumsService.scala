@@ -8,6 +8,10 @@ import com.zengularity.appmusic.models.AppMusicModels.Album
 import com.zengularity.appmusic.ws.{DeezerClient, SpotifyClient, StreamingClient}
 
 class AlbumsService(streamingClients: Map[String, StreamingClient], persistence: MongoAlbumsPersistence) {
+  def saveAlbum(id: String) = {
+
+  }
+
 
   def synchronize(userId: String, service: String)(implicit ec: ExecutionContext): Future[Either[String, Unit]] = {
     RedisLikeUsersDatabase.getUserId(userId, service).map { serviceId =>
