@@ -26,7 +26,9 @@ class Router(albumsService: AlbumsService)(implicit ec: ExecutionContext) {
       } ~ {
         (get & path("album" / Segment)) { id =>
           complete {
-            StatusCodes.OK
+            albumsService.getAlbumById(id).map { album =>
+              Json.toJson(album)
+            }
           }
         }
       } ~ {

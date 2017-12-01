@@ -1,11 +1,10 @@
 package com.zengularity.appmusic.services
 
 import scala.concurrent.{ExecutionContext, Future}
-
 import persistence.{MongoAlbumsPersistence, RedisLikeUsersDatabase}
-
 import com.zengularity.appmusic.AppContext
 import com.zengularity.appmusic.models.AppMusicModels
+import com.zengularity.appmusic.models.AppMusicModels.Album
 import com.zengularity.appmusic.ws.{DeezerClient, SpotifyClient, StreamingClient}
 
 class AlbumsService(streamingClients: Map[String, StreamingClient], persistence: MongoAlbumsPersistence) {
@@ -22,6 +21,8 @@ class AlbumsService(streamingClients: Map[String, StreamingClient], persistence:
   }
 
   def albums(implicit ec: ExecutionContext): Future[List[AppMusicModels.Album]] = persistence.allAlbums
+
+  def getAlbumById(id: String)(implicit ex: ExecutionContext): Future[Option[Album]] = persistence.getAlbumById(id)
 }
 
 object AlbumsService {
