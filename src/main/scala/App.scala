@@ -3,17 +3,14 @@ package com.zengularity.appmusic
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContextExecutor}
 import scala.io.StdIn
-
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
-
 import play.api.libs.ws.ahc.StandaloneAhcWSClient
-
 import com.typesafe.scalalogging.Logger
-
-import com.zengularity.appmusic.ws.DeezerClient
+import com.zengularity.appmusic.services.BusinessService
+import com.zengularity.appmusic.ws.{DeezerClient, SpotifyClient}
 
 
 object App {
@@ -26,7 +23,10 @@ object App {
     implicit val ec: ExecutionContextExecutor = actorSystem.dispatcher
 
     val wsClient = StandaloneAhcWSClient()
-    val router = new Router(new DeezerClient(wsClient, "https://api.deezer.com"))
+    val deezerClient = new DeezerClient(wsClient, "https://api.deezer.com")
+    val spotifyClient = new SpotifyClient(wsClient, "") //TODO: Add real url
+    val businessService = new BusinessService(deezerClient, spotifyClient)
+    val router = new Router(businessService)
 
     val bindingFuture = Http(actorSystem).bindAndHandle(Route.handlerFlow(router.instance), "localhost", 9000)
     logger.info("Server on localhost:9000")
