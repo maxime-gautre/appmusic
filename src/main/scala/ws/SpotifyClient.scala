@@ -3,20 +3,18 @@ package com.zengularity.appmusic.ws
 import java.nio.charset.StandardCharsets
 
 import com.typesafe.scalalogging.Logger
-import play.api.libs.json.{JsValue, Json}
+import com.zengularity.appmusic.models.{AppMusicModels, SpotifyModels}
+import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import play.api.libs.ws.DefaultBodyWritables._
 import play.api.libs.ws.ahc.StandaloneAhcWSClient
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
-
-import com.zengularity.appmusic.models.AppMusicModels
 
 class SpotifyClient(wsClient: StandaloneAhcWSClient, spotifyEndPoint: String) extends StreamingClient {
 
   private final val OAUTH_CLIENT_ID: String = "72a27ca374f84ad09e643d29a58ba8ae"
   private final val OAUTH_CLIENT_SECRET: String = "fa6b4f4d89754c1a993216beae469f6c"
-  private final val OAUTH_CODE: String = "AQDS8jC5kKOQE-Z1g-td1ScCpdYb9lw0bRT3ddwzgJvweMUoI9XSTyDFySKhpOvCWA2G_Tj-R6Lu-P8ETIuLng6oOPO8k-qZ548aDphppPCcKzraLUwbUpikdREqvy4t40HHsAkp1aIdO22PrYgCm_QmafJgpWH56gz_gKFS8ne-G6THI94L68ChI_reZRvLjFXkuxg6Uang2fiRTEYF3RLcEcuTRoY8ZbbWr9_KNHc2ye8cVi8JtVw"
-  private final val OAUTH_REDIRECT_URI: String = "http://localhost:8888/callback/"
   private final val OAUTH_REFRESH_TOKEN: String = "AQCHdgYFcB6F87UXxpvloUAQIdUhrr7cc-wmHyUg95K9p_a-4IzHVTnO432trgrpwQUMlQSOoX6QsbmiS-GmegI4U9i5dkRtW5uZnepE_TsGXGg0H-qxJ9g3ZnK6v1ahJAw"
 
   private var accessToken: String = "FAKE" // TODO Default null value and handle it in get()
@@ -28,11 +26,11 @@ class SpotifyClient(wsClient: StandaloneAhcWSClient, spotifyEndPoint: String) ex
     }
   }
 
-  private def get(url: String)(implicit ec: ExecutionContext): Future[Either[String, JsValue]] = {
-    wsClient.url(url).addHttpHeaders(("Authorization", s"Bearer ${accessToken}")).get().flatMap { response =>
+  private def get(path: String, params: (String, String)*)(implicit ec: ExecutionContext): Future[Either[String, JsValue]] = {
+    wsClient.url(s"$spotifyEndPoint/$path").addHttpHeaders(("Authorization", s"Bearer ${accessToken}")).withQueryStringParameters(params:_*).get().flatMap { response =>
       response.status match {
         case 401 => refreshToken().flatMap { _ =>
-          get(url)
+          get(path, params:_*)
         }
         case _ => Future.successful(parseResponse(response.body))
       }
@@ -55,13 +53,42 @@ class SpotifyClient(wsClient: StandaloneAhcWSClient, spotifyEndPoint: String) ex
   }
 
   def userData(userId: String)(implicit ec: ExecutionContext): Future[Either[String, JsValue]] = {
-    get(s"$spotifyEndPoint/users/$userId");
+    get(s"users/$userId");
   }
 
   def userPlaylist(userId: String)(implicit ec: ExecutionContext): Future[Either[String, List[AppMusicModels.Playlist]]] = {
-    get(s"$spotifyEndPoint/users/$userId/albums");
+    get(s"users/$userId/albums");
     ???
   }
 
   def userAlbums(userId: String)(implicit ec: ExecutionContext): Future[Either[String, List[AppMusicModels.Album]]] = ???
+
+  def album(id: String)(implicit ec: ExecutionContext): Future[Either[String, AppMusicModels.Album]] = {
+    get(s"albums/$id").flatMap {
+      case Right(json) => {
+        Logger(getClass).info(s"BOOM 2 ${json.toString()}")
+        val albumResult = json.validate[SpotifyModels.Album]
+        val res = albumResult match {
+          case JsSuccess(album, _) => Right(AppMusicModels.ConvertAlbum.convert(album)(AppMusicModels.Instances.albumConverterSpotify))
+          case JsError(errors) => Left(JsError.toJson(errors).toString())
+        }
+        Future.successful(res)
+      }
+      case Left(err) => Future.successful(Left(err))
+    }
+  }
+
+  def albumLike(name: String, artist: String)(implicit ec: ExecutionContext): Future[Either[String, AppMusicModels.Album]] = {
+    get("search", ("type", "album"), ("q", s"""album:"$name" artist:"$artist"""")).flatMap {
+      case Right(json) => {
+        val albumResult = (json \ "albums" \ "items").validate[Seq[SpotifyModels.AlbumSimplified]]
+        albumResult match {
+          case JsSuccess(Nil, _) => Future.successful(Left("Empty album"))
+          case JsSuccess(albumSimplified :: _, _) => album(albumSimplified.id)
+          case JsError(errors) => Future.successful(Left(JsError.toJson(errors).toString()))
+        }
+      }
+      case Left(err) => Future.successful(Left(err))
+    }
+  }
 }
