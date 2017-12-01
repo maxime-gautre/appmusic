@@ -12,22 +12,34 @@ import scala.concurrent.ExecutionContext
 class Router(deezerClient: StreamingClient)(implicit ec: ExecutionContext) {
 
   val instance: Route = {
-    pathPrefix("deezer") {
-      (get & path("user" / Segment)) { id =>
+    pathPrefix("api") {
+      (get & path("albums" / Segment)) { id =>
         complete {
-          deezerClient.userData(id).map {
-            case Left(err) => (StatusCodes.BadRequest, Json.obj("error" -> err))
-            case Right(user) => (StatusCodes.OK, Json.obj("data" -> user))
-          }
+          StatusCodes.OK
         }
-      } ~ {
-        (get & path("user" / Segment / "playlists")) { id =>
-          complete {
-            deezerClient.userPlaylist(id).map {
-              case Left(err) => (StatusCodes.BadRequest, Json.obj("error" -> err))
-              case Right(albums) => (StatusCodes.OK, Json.toJson(albums))
-            }
-          }
+      }
+    } ~ {
+      (get & path("album" / Segment )) { id =>
+        complete {
+          StatusCodes.OK
+        }
+      }
+    } ~ {
+      (get & path("tracks" / Segment )) { id =>
+        complete {
+          StatusCodes.OK
+        }
+      }
+    } ~ {
+      (get & path("sync" / Segment )) { id =>
+        complete {
+          StatusCodes.OK
+        }
+      }
+    } ~ {
+      (get & path("import" / Segment )) { id =>
+        complete {
+          StatusCodes.OK
         }
       }
     }
