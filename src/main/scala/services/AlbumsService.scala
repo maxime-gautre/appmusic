@@ -11,9 +11,8 @@ class AlbumsService(streamingClients: Map[String, StreamingClient], persistence:
   def saveAlbum(internalId: String)(implicit ex: ExecutionContext) = {
     streamingClients.get("spotify").map { streamingClient =>
       getAlbumById(internalId).map {
-        case Some(album) =>
-          streamingClient.saveAlbum(album.origin.id)
-        case None => {}
+        case Some(album) => streamingClient.saveAlbum("2RV7dQWd4AWcOJKZwbbIcD")
+        case None => ()
       }
     }
   }

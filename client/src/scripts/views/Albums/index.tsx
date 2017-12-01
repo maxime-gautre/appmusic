@@ -52,7 +52,7 @@ export class AlbumList extends React.Component<RouteComponentProps<Album>, State
         'Content-type': 'application/json'
       },
       body: JSON.stringify(body)
-    }).then(r => console.log(r))
+    }).then(r => console.log(r)).then(() => this.getAlbums())
   }
 
   changePlatform = (e: React.MouseEvent<{}>) => {
@@ -102,6 +102,9 @@ export class AlbumList extends React.Component<RouteComponentProps<Album>, State
                   Importé de {currentAlbum.origin.service}
                 </div>
               </div>
+              <div>
+                <button className="button" onClick={() => this.syncAlbum(currentAlbum.id)}>Synchroniser dans Spotify</button>
+              </div>
             </div>
 
             <div className="right">
@@ -140,7 +143,18 @@ export class AlbumList extends React.Component<RouteComponentProps<Album>, State
     return hours + 'h' + minutes + 'm' + seconds + 's';
   }
 
+  syncAlbum(id: string) {
+    console.log("Save album ", id)
+    fetch("http://localhost:9000/api/saveAlbum/"+id, {
+      method: 'POST'
+    }).then(data => console.log(data.statusText))
+  }
+
   componentDidMount() {
+    this.getAlbums()
+  }
+
+  getAlbums() {
     fetch('http://localhost:9000/api/albums', {
       method: 'GET',
     }).then( data => data.json()).then(data => this.setState({albums: data}))

@@ -39,7 +39,7 @@ class MongoAlbumsPersistence(mongoConnection: MongoConnection, dbName: String) {
   def getAlbumById(id: String)(implicit  ex: ExecutionContext): Future[Option[Album]] = {
     for {
       collection <- albumCollection
-      album <- collection.find(BSONDocument("_id" -> id)).one[Album]
+      album <- collection.find(BSONDocument("id" -> id)).one[Album]
     } yield album
   }
 
