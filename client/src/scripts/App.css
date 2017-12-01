@@ -1,2 +1,59 @@
 .app {
-  color: red; }
+  display: flex; }
+
+.children-routes {
+  width: 100%; }
+
+.main-sidebar {
+  min-width: calc(312px - 100px);
+  height: 100vh;
+  position: relative;
+  background-color: #F5F5F5;
+  border-right: 1px solid gainsboro;
+  padding: 0 50px; }
+  .main-sidebar .logo {
+    background-image: url(../assets/CISUM-ME.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 75%;
+    height: 50px;
+    margin: 70px 0 80px; }
+  .main-sidebar li {
+    list-style-type: none;
+    padding: 10px 0; }
+    .main-sidebar li:first-of-type {
+      margin-bottom: 30px; }
+      .main-sidebar li:first-of-type h3 {
+        color: #333333; }
+    .main-sidebar li:hover {
+      color: #333333;
+      list-style-type: disc; }
+    .main-sidebar li h3 {
+      font-size: 22px;
+      color: #2F80ED; }
+  .main-sidebar a {
+    text-decoration: none;
+    color: #4F4F4F;
+    transition: all .3s ease-in-out;
+    padding: 10px 0; }
+    .main-sidebar a .active {
+      list-style-type: circle; }
+    .main-sidebar a .category-title {
+      color: #333333; }
+  .main-sidebar .userDisplay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 90px;
+    background-color: #EBEBEB;
+    display: flex;
+    align-items: center; }
+    .main-sidebar .userDisplay .avatar {
+      border-radius: 100%;
+      height: 50px;
+      width: 50px;
+      box-shadow: 0 0 3px -1px #333;
+      margin: 0 25px; }
+    .main-sidebar .userDisplay .infos .userEmail {
+      color: #4F4F4F; }

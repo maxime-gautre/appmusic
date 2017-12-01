@@ -1,0 +1,17 @@
+.albumPageContainer {
+  background-color: #E5E5E5;
+  height: 100vh;
+  padding: 50px; }
+  .albumPageContainer .header {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between; }
+    .albumPageContainer .header .search {
+      display: flex;
+      flex-flow: column nowrap; }
+      .albumPageContainer .header .search h1 {
+        font-size: 28px;
+        line-height: 33px; }
+    .albumPageContainer .header .synchronize {
+      display: flex; }

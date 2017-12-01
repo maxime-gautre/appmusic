@@ -1,3 +1,83 @@
+$grey: #4F4F4F;
+$dark-grey: #333333;
+$blue: #2F80ED;
+
+
 .app {
-  color: red;
+  display: flex;
+}
+
+.children-routes { width: 100%; }
+
+.main-sidebar {
+  min-width: calc(312px - 100px);
+  height: 100vh;
+  position: relative;
+  background-color: #F5F5F5;
+  border-right: 1px solid darken(#F5F5F5, 10%);
+  padding: 0 50px;
+
+  .logo {
+    background-image: url(../assets/CISUM-ME.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 75%;
+    height: 50px;
+    margin: 70px 0 80px;
+  }
+
+  li {
+    list-style-type: none;
+    padding: 10px 0;
+
+    &:first-of-type {
+      margin-bottom: 30px;
+      & h3 { color: $dark-grey; }
+    }
+    &:hover {
+      color: $dark-grey;
+      list-style-type: disc;
+    }
+
+    h3 {
+      font-size: 22px;
+      color: $blue;
+    }
+  }
+
+  a {
+    text-decoration: none;
+    color: $grey;
+    transition: all .3s ease-in-out;
+    padding: 10px 0;
+
+    .active {
+      list-style-type: circle;
+    }
+
+    .category-title { color: $dark-grey; }
+  }
+
+  .userDisplay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 90px;
+    background-color: #EBEBEB;
+    display: flex;
+    align-items: center;
+
+    .avatar {
+      border-radius: 100%;
+      height: 50px;
+      width: 50px;
+      box-shadow: 0 0 3px -1px #333;
+      margin: 0 25px;
+    }
+
+    .infos {
+      .userEmail { color: $grey; }
+    }
+  }
 }

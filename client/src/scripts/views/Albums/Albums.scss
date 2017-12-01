@@ -1,0 +1,26 @@
+.albumPageContainer {
+  background-color: #E5E5E5;
+  height: 100vh;
+  padding: 50px;
+
+  .header {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+
+    .search {
+      display: flex;
+      flex-flow: column nowrap;
+
+      h1 {
+        font-size: 28px;
+        line-height: 33px;
+      }
+    }
+
+    .synchronize {
+      display: flex;
+    }
+  }
+}
