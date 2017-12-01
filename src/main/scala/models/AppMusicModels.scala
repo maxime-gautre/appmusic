@@ -15,7 +15,7 @@ object AppMusicModels {
     implicit val jsonWriter = Json.writes[Track]
   }
 
-  case class Playlist(id: String, title: String, uri: String, imageUri: String, tracks: List[Track])
+  case class Playlist(id: String, title: String, uri: String, imageUri: String, tracks: List[Track], origin: String)
 
   object Playlist {
     implicit val jsonWriter = Json.writes[Playlist]
@@ -33,31 +33,17 @@ object AppMusicModels {
     def convert(data: A): Playlist
   }
 
-  object ConvertArtistFromSpotify {
-    def convert(data : SpotifyModels.Artist)(implicit converter: ArtistConverter[SpotifyModels.Artist]) = converter.convert(data)
+  object ConvertArtist {
+    def convert[A](data : A)(implicit converter: ArtistConverter[A]) = converter.convert(data)
   }
 
-  object ConvertTrackFromSpotify {
-    def convert(data : SpotifyModels.Track)(implicit converter: TrackConverter[SpotifyModels.Track]) = converter.convert(data)
+  object ConvertTrack {
+    def convert[A](data : A)(implicit converter: TrackConverter[A]) = converter.convert(data)
   }
 
-  object ConvertPlaylistFromSpotify {
-    def convert(data : SpotifyModels.Playlist)(implicit converter: PlaylistConverter[SpotifyModels.Playlist]) = converter.convert(data)
+  object ConvertPlaylist {
+    def convert[A](data : A)(implicit converter: PlaylistConverter[A]) = converter.convert(data)
   }
-
-  object ConvertArtistFromDeezer {
-    def convert(data : DeezerModels.Artist)(implicit converter: ArtistConverter[DeezerModels.Artist]) = converter.convert(data)
-  }
-
-  object ConvertTrackFromDeezer {
-    def convert(data : DeezerModels.Track)(implicit converter: TrackConverter[DeezerModels.Track]) = converter.convert(data)
-  }
-
-  object ConvertPlaylistFromDeezer {
-    def convert(data : DeezerModels.Playlist)(implicit converter: PlaylistConverter[DeezerModels.Playlist]) = converter.convert(data)
-  }
-
-
 
   object Instances {
     implicit val artistConverterSpotify: ArtistConverter[SpotifyModels.Artist] = new ArtistConverter[SpotifyModels.Artist] {
@@ -68,13 +54,13 @@ object AppMusicModels {
 
     implicit val trackConverterSpotify: TrackConverter[SpotifyModels.Track] = new TrackConverter[SpotifyModels.Track] {
       override def convert(data: SpotifyModels.Track): Track = {
-        Track(data.id, data.title, data.uri, data.duration_ms / 1000, data.artists.map(ConvertArtistFromSpotify.convert))
+        Track(data.id, data.title, data.uri, data.duration_ms / 1000, data.artists.map(ConvertArtist.convert(_)))
       }
     }
 
     implicit val playlistConverterSpotify: PlaylistConverter[SpotifyModels.Playlist] = new PlaylistConverter[SpotifyModels.Playlist] {
       override def convert(data: SpotifyModels.Playlist): Playlist = {
-        Playlist(data.id, data.name, data.uri, data.images.head.url, data.tracks.map(ConvertTrackFromSpotify.convert))
+        Playlist(data.id, data.name, data.uri, data.images.head.url, data.tracks.map(ConvertTrack.convert(_)), "spotify")
       }
     }
 
@@ -86,16 +72,14 @@ object AppMusicModels {
 
     implicit val trackConverterDeezer: TrackConverter[DeezerModels.Track] = new TrackConverter[DeezerModels.Track] {
       override def convert(data: DeezerModels.Track): Track = {
-        Track(data.id.toString, data.title, data.link, data.duration, List(ConvertArtistFromDeezer.convert(data.artist)))
+        Track(data.id.toString, data.title, data.link, data.duration, List(ConvertArtist.convert(data.artist)))
       }
     }
 
     implicit val playlistConverterDeezer: PlaylistConverter[DeezerModels.Playlist] = new PlaylistConverter[DeezerModels.Playlist] {
-      override def convert(data: DeezerModels.Playlist): Playlist = {
-        Playlist(data.id.toString, data.title, data.link, data.picture, data.tracks.map(ConvertTrackFromDeezer.convert))
+      def convert(data: DeezerModels.Playlist): Playlist = {
+        Playlist(data.id.toString, data.title, data.link, data.picture, data.tracks.map(ConvertTrack.convert(_)), "deezer")
       }
     }
-
   }
-
 }

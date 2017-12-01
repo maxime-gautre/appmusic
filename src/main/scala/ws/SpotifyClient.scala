@@ -6,11 +6,12 @@ import com.typesafe.scalalogging.Logger
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.DefaultBodyWritables._
 import play.api.libs.ws.ahc.StandaloneAhcWSClient
-
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
-class SpotifyAhcClient(wsClient: StandaloneAhcWSClient, spotifyEndPoint: String) extends StreamingClient {
+import com.zengularity.appmusic.models.AppMusicModels
+
+class SpotifyClient(wsClient: StandaloneAhcWSClient, spotifyEndPoint: String) extends StreamingClient {
 
   private final val OAUTH_CLIENT_ID: String = "72a27ca374f84ad09e643d29a58ba8ae"
   private final val OAUTH_CLIENT_SECRET: String = "fa6b4f4d89754c1a993216beae469f6c"
@@ -57,7 +58,8 @@ class SpotifyAhcClient(wsClient: StandaloneAhcWSClient, spotifyEndPoint: String)
     get(s"$spotifyEndPoint/users/$userId");
   }
 
-  def userAlbums(userId: String)(implicit ec: ExecutionContext): Future[Either[String, JsValue]] = {
+  def userPlaylist(userId: String)(implicit ec: ExecutionContext): Future[Either[String, List[AppMusicModels.Playlist]]] = {
     get(s"$spotifyEndPoint/users/$userId/albums");
+    ???
   }
 }
