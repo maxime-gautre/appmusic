@@ -14,7 +14,7 @@ import com.typesafe.scalalogging.Logger
 
 import com.zengularity.appmusic.services.AlbumsService
 
-object App {
+object App extends CorsSupport {
 
   def main(args: Array[String]): Unit = {
 
@@ -32,7 +32,7 @@ object App {
     } yield {
       val router = new Router(AlbumsService(appContext))
 
-      val bindingFuture = Http(actorSystem).bindAndHandle(Route.handlerFlow(router.instance), "localhost", 9000)
+      val bindingFuture = Http(actorSystem).bindAndHandle(Route.handlerFlow(corsHandler(router.instance)), "localhost", 9000)
       logger.info("Server on localhost:9000")
       logger.info("Press enter to stop")
 

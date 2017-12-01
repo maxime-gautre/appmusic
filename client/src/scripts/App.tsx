@@ -16,7 +16,8 @@ export const App = () => (
         atActive={{ opacity: 1 }}
         className="children-routes"
       >
-        <Route exact path="/albums" component={ AlbumList }/>
+        <Route exact path="/albums" component={ AlbumList }>
+        </Route>
       </AnimatedSwitch>
     </div>
   </Router>
