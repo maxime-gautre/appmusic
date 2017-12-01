@@ -13,7 +13,7 @@ class Router(deezerClient: StreamingClient)(implicit ec: ExecutionContext) {
 
   val instance: Route = {
     pathPrefix("api") {
-      (get & path("albums" / Segment)) { id =>
+      (get & path("albums")) {
         complete {
           StatusCodes.OK
         }
@@ -25,13 +25,7 @@ class Router(deezerClient: StreamingClient)(implicit ec: ExecutionContext) {
         }
       }
     } ~ {
-      (get & path("tracks" / Segment )) { id =>
-        complete {
-          StatusCodes.OK
-        }
-      }
-    } ~ {
-      (get & path("sync" / Segment )) { id =>
+      (get & path("sync")) {
         complete {
           StatusCodes.OK
         }
