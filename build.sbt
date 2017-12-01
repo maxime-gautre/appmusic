@@ -15,6 +15,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-stream" % akkaVersion,
   "com.typesafe.akka" %% "akka-actor" % akkaVersion,
   "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
-  "de.heikoseeberger" %% "akka-http-play-json" % "1.18.1"
+  "de.heikoseeberger" %% "akka-http-play-json" % "1.18.1",
+  "org.reactivemongo" %% "reactivemongo" % "0.12.7"
 )
         
