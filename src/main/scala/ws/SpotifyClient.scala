@@ -15,8 +15,8 @@ class SpotifyClient(wsClient: StandaloneAhcWSClient, spotifyEndPoint: String) ex
 
   private final val OAUTH_CLIENT_ID: String = "72a27ca374f84ad09e643d29a58ba8ae"
   private final val OAUTH_CLIENT_SECRET: String = "fa6b4f4d89754c1a993216beae469f6c"
-  private final val OAUTH_REFRESH_TOKEN: String = "AQCHdgYFcB6F87UXxpvloUAQIdUhrr7cc-wmHyUg95K9p_a-4IzHVTnO432trgrpwQUMlQSOoX6QsbmiS-GmegI4U9i5dkRtW5uZnepE_TsGXGg0H-qxJ9g3ZnK6v1ahJAw"
-
+  private final val OAUTH_REFRESH_TOKEN: String = "AQD8PFCjjmMJh2Y9KWSatQ1KN5yi1MTgVjv5e0j9y_wrrF0qUeIWDFiGXexFIltENqv42brmYVKTPKI3jX9edSLpDU9me8eHJcFotwOtBgfbkoXp_1RIB5BawmNrvJEb4Jg"
+  
   private var accessToken: String = "FAKE" // TODO Default null value and handle it in get()
 
   private def parseResponse(body: String): Either[String, JsValue] = {
