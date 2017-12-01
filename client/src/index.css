@@ -61,7 +61,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: neuzeit_reg, sans-serif;
-  letter-spacing: 1px; }
+  letter-spacing: 1px;
+  background-color: #eaeaea; }
 
 h1, h2, h3 {
   font-family: neuzeit_gro, sans-serif;

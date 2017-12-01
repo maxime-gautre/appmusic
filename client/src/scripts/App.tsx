@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import { AnimatedSwitch } from 'react-router-transition';
 
 import { AlbumList } from './views/Albums'
+import { Artists } from './views/Artists'
+import { Playlists } from './views/Playlists'
 
 export const App = () => (
   <Router>
@@ -12,11 +14,14 @@ export const App = () => (
       <SideBar/>
       <AnimatedSwitch
         atEnter={{ opacity: 0 }}
-        atLeave={{ opacity: 0 }}
+        atLeave={{ opacity: 1 }}
         atActive={{ opacity: 1 }}
+        runOnMount={ false }
         className="children-routes"
       >
         <Route exact path="/albums" component={ AlbumList }/>
+        <Route exact path="/artistes" component={ Artists }/>
+        <Route exact path="/playlists" component={ Playlists }/>
       </AnimatedSwitch>
     </div>
   </Router>

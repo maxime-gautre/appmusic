@@ -1,13 +1,15 @@
 .albumPageContainer {
   background-color: #E5E5E5;
   height: 100vh;
-  padding: 50px;
+  padding: 0 100px;
 
   .header {
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
     justify-content: space-between;
+    height: 250px;
+    border-bottom: 2px solid darken(#E5E5E5, 5%);
 
     .search {
       display: flex;
@@ -17,10 +19,53 @@
         font-size: 28px;
         line-height: 33px;
       }
+
+      p { color: grey }
+
+      input {
+        border-radius: 25px;
+        padding: 15px 5px 15px 15px;
+        border: 1px solid lightgrey;
+        margin-top: 30px;
+        outline: none;
+        transition: all .2s ease;
+
+        &:focus {
+          border-color: grey;
+        }
+      }
     }
 
     .synchronize {
       display: flex;
+      color: white;
+      text-decoration: none;
+      border: none;
+      background-color: transparent;
+      padding: 15px 20px;
+      text-align: center;
+      line-height: 18px;
+      margin-top: 127px;
+      align-self: flex-start;
+
+      .left {
+        background-color: #333;
+        padding: inherit;
+        border-top-left-radius: 25px;
+        border-bottom-left-radius: 25px;
+      }
+
+      .right {
+        padding: inherit;
+        background-color: #333;
+        border-top-right-radius: 25px;
+        border-bottom-right-radius: 25px;
+        line-height: 18px;
+      }
+
+      &:hover {
+        cursor: pointer;
+      }
     }
   }
 }

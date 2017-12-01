@@ -25,7 +25,7 @@
       margin-bottom: 30px; }
       .main-sidebar li:first-of-type h3 {
         color: #333333; }
-    .main-sidebar li:hover {
+    .main-sidebar li:hover:not(:first-of-type) {
       color: #333333;
       list-style-type: disc; }
     .main-sidebar li h3 {

@@ -34,7 +34,7 @@ $blue: #2F80ED;
       margin-bottom: 30px;
       & h3 { color: $dark-grey; }
     }
-    &:hover {
+    &:hover:not(:first-of-type) {
       color: $dark-grey;
       list-style-type: disc;
     }
