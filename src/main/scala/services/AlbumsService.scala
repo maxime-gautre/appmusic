@@ -29,7 +29,7 @@ object AlbumsService {
     new AlbumsService(
       Map(
         "deezer" -> new DeezerClient(appContext.wsClient, "https://api.deezer.com"),
-        "spotify" -> new SpotifyClient(appContext.wsClient, "https://api.spotify.com")
+        "spotify" -> new SpotifyClient(appContext.wsClient, "https://api.spotify.com/v1")
       ),
       new MongoAlbumsPersistence(appContext.mongoConnection, appContext.dbName)
     )
